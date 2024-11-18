@@ -1,44 +1,42 @@
-import { useCallback } from 'react';
-import { useDebounce } from '../hooks/useDebounce';
+import React from 'react';
 
 interface TalkFiltersProps {
-  onSearch: (query: string) => void;
-  onTopicChange: (topic: string) => void;
-  selectedTopic?: string;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
+  selectedTopic: string;
+  setSelectedTopic: (topic: string) => void;
+  topics: string[]; // Dynamic list of topics
 }
 
-export function TalkFilters({ onSearch, onTopicChange, selectedTopic }: TalkFiltersProps) {
-  const debouncedSearch = useDebounce(onSearch, 300);
-
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    debouncedSearch(e.target.value);
-  }, [debouncedSearch]);
-
+export const TalkFilters: React.FC<TalkFiltersProps> = ({
+  searchQuery,
+  setSearchQuery,
+  selectedTopic,
+  setSelectedTopic,
+  topics,
+}) => {
   return (
-    <div className="flex flex-col sm:flex-row gap-4 mb-6">
-      <div className="flex-1">
-        <input
-          type="search"
-          placeholder="Search talks..."
-          onChange={handleSearchChange}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          aria-label="Search talks"
-        />
-      </div>
-      <div className="w-full sm:w-48">
-        <select
-          value={selectedTopic || ''}
-          onChange={(e) => onTopicChange(e.target.value)}
-          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          aria-label="Filter by topic"
-        >
-          <option value="">All Topics</option>
-          <option value="Technology">Technology</option>
-          <option value="Science">Science</option>
-          <option value="Global Issues">Global Issues</option>
-          <option value="Design">Design</option>
-        </select>
-      </div>
+    <div className="w-full sm:w-1/6 flex flex-col space-y-4">
+      {/* Search Input */}
+      <input
+        type="text"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        placeholder="Search talks..."
+        className="p-4 rounded-lg text-lg sm:text-xl text-black placeholder-gray-500"
+      />
+      {/* Topic Dropdown */}
+      <select
+        value={selectedTopic}
+        onChange={(e) => setSelectedTopic(e.target.value)}
+        className="w-full py-2 px-4 rounded-md bg-white text-gray-800"
+      >
+        {topics.map((topic, index) => (
+          <option key={index} value={topic}>
+            {topic}
+          </option>
+        ))}
+      </select>
     </div>
   );
-}
+};

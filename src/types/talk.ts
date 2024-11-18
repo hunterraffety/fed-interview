@@ -14,10 +14,10 @@ export interface Image {
 }
 
 export interface Video {
-  id: number;
+  id: string;
   title: string;
   slug: string;
-  primaryImageSet: Image;
+  primaryImageSet: Image[];
   presenterDisplayName: string;
   duration: number;
   canonicalUrl: string;
@@ -41,16 +41,14 @@ export interface VideosResponse {
   };
 }
 
-export interface TalkResponse {
-  data: Video[];
-  meta?: {
-    total: number;
-    page: number;
-  };
-}
-
-export type ApiError = {
+export interface ApiError {
   message: string;
   code?: string;
   details?: unknown;
-};
+}
+
+export interface UseVideosOptions {
+  pageSize?: number;
+  searchQuery?: string;
+  topicFilter?: string;
+}

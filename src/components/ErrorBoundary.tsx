@@ -12,7 +12,7 @@ interface State {
 
 export class ErrorBoundary extends Component<Props, State> {
   state: State = {
-    hasError: false
+    hasError: false,
   };
 
   static getDerivedStateFromError(error: Error): State {
@@ -25,7 +25,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback || <div>Something went wrong</div>;
+      return (
+        this.props.fallback || <div>Something went wrong! Embarassing!</div>
+      );
     }
 
     return this.props.children;

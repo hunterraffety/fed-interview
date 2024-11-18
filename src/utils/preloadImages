@@ -1,0 +1,23 @@
+// Import the Image type from your types file
+import { Image } from "../types/talk";
+
+/**
+ * Preload all images in the given array.
+ *
+ * @param images - Array of Image objects with URLs.
+ * @returns Promise<void> - Resolves when all images are preloaded.
+ */
+export const preloadImages = async (images: Image[]): Promise<void> => {
+  // Map each image to a Promise that resolves when the image loads
+  const promises = images.map((image) => {
+    return new Promise<void>((resolve, reject) => {
+      const img = new Image(); // Create an offscreen <img> element
+      img.src = image.url; // Set the image source URL
+      img.onload = () => resolve(); // Resolve when the image loads
+      img.onerror = () => reject(new Error(`Failed to preload image: ${image.url}`)); // Reject on error
+    });
+  });
+
+  // Await all preloading Promises to ensure all images are loaded
+  await Promise.all(promises);
+};
